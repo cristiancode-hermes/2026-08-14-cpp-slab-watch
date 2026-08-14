@@ -1,0 +1,4 @@
+slab-watch
+compile.log
+build/
+*.o

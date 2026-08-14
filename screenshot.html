@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1e1e2e;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 40px;
+  }
+  .terminal {
+    background: #181825;
+    border-radius: 12px;
+    padding: 24px 28px;
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #cdd6f4;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    max-width: 980px;
+    width: 100%;
+    border: 1px solid #313244;
+  }
+  .terminal .title-bar {
+    display: flex; align-items: center; gap: 8px;
+    padding-bottom: 16px; border-bottom: 1px solid #313244;
+    margin-bottom: 16px;
+  }
+  .terminal .title-bar .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .terminal .title-bar .dot.r { background: #f38ba8; }
+  .terminal .title-bar .dot.y { background: #f9e2af; }
+  .terminal .title-bar .dot.g { background: #a6e3a1; }
+  .terminal .title-bar .title { margin-left: 12px; font-size: 13px; color: #6c7086; }
+  .terminal .line { white-space: pre; }
+  .terminal .highlight { color: #89b4fa; }
+  .terminal .green { color: #a6e3a1; }
+  .terminal .yellow { color: #f9e2af; }
+  .terminal .red { color: #f38ba8; }
+  .terminal .dim { color: #6c7086; }
+  .terminal .cyan { color: #89dceb; }
+  .terminal .bold { color: #cdd6f4; }
+  .terminal .sep { color: #45475a; }
+  .terminal .prompt { color: #a6adc8; }
+  .terminal .header { color: #f5e0dc; }
+</style>
+</head>
+<body>
+<div class="terminal">
+  <div class="title-bar">
+    <div class="dot r"></div>
+    <div class="dot y"></div>
+    <div class="dot g"></div>
+    <span class="title">slab-watch — Linux Kernel Slab Allocator Monitor (C++23)</span>
+  </div>
+
+  <div class="line prompt">  $ ./slab-watch --top 8</div>
+  <div class="line bold">  SLAB WATCH — Linux kernel slab allocator (proc/slabinfo)</div>
+  <div class="line sep">  ------------------------------------------------------------------------------</div>
+  <div class="line cyan">  TOP CACHES BY MEMORY (8 of 32)</div>
+  <div class="line dim">  NAME                     ACTIVE/TOTAL  OBJSIZE  SLABS   MEMORY    UTIL</div>
+  <div class="line"><span class="red">  inode_cache            76.4k/81.9k       640  1607   50.2M   93.3%</span></div>
+  <div class="line"><span class="yellow">  dentry                 84.5k/98.3k       192   615   19.2M   86.0%</span></div>
+  <div class="line"><span class="green">  TCP                     4.1k/8.2k       2.1k  1171   18.3M   50.0%</span></div>
+  <div class="line"><span class="yellow">  filp                   51.2k/65.5k       256   512   16.0M   78.1%</span></div>
+  <div class="line"><span class="yellow">  radix_tree_node        12.3k/16.4k       576   586    9.2M   75.0%</span></div>
+  <div class="line"><span class="green">  vm_area_struct         20.5k/32.8k       200   202    6.3M   62.5%</span></div>
+  <div class="line"><span class="yellow">  kmalloc-256            12.8k/16.4k       256   128    4.0M   78.1%</span></div>
+  <div class="line"><span class="yellow">  kmalloc-128            24.6k/32.8k       128   128    4.0M   75.0%</span></div>
+  <div class="line sep">  ------------------------------------------------------------------------------</div>
+  <div class="line">  SUMMARY  caches 32   objects 752.0k   slab memory <span class="cyan">164.5M</span> (active 128.4M)   util <span class="yellow">77.3%</span>   page 4096B</div>
+  <div class="line"></div>
+
+  <div class="line prompt">  $ ./slab-watch --json | python3 -c "import json,sys; json.load(sys.stdin)"</div>
+  <div class="line sep">  {</div>
+  <div class="line">    <span class="cyan">"caches"</span>: [</div>
+  <div class="line">        {<span class="cyan">"name"</span>: <span class="yellow">"inode_cache"</span>, <span class="cyan">"active_objs"</span>: 76432, <span class="cyan">"num_objs"</span>: 81920, <span class="cyan">"objsize"</span>: 640, <span class="cyan">"active_slabs"</span>: 1498, <span class="cyan">"num_slabs"</span>: 1607, <span class="cyan">"active_mem"</span>: 49094656, <span class="cyan">"total_mem"</span>: 52658176, <span class="cyan">"utilization"</span>: 93.3},</div>
+  <div class="line">        {<span class="cyan">"name"</span>: <span class="yellow">"dentry"</span>, <span class="cyan">"active_objs"</span>: 84512, <span class="cyan">"num_objs"</span>: 98304, <span class="cyan">"objsize"</span>: 192, <span class="cyan">"active_slabs"</span>: 528, <span class="cyan">"num_slabs"</span>: 615, <span class="cyan">"active_mem"</span>: 17301504, <span class="cyan">"total_mem"</span>: 20152320, <span class="cyan">"utilization"</span>: 86.0},</div>
+  <div class="line">        {<span class="cyan">"name"</span>: <span class="yellow">"TCP"</span>, <span class="cyan">"active_objs"</span>: 4096, <span class="cyan">"num_objs"</span>: 8192, <span class="cyan">"objsize"</span>: 2112, <span class="cyan">"active_slabs"</span>: 585, <span class="cyan">"num_slabs"</span>: 1171, <span class="cyan">"active_mem"</span>: 9584640, <span class="cyan">"total_mem"</span>: 19185664, <span class="cyan">"utilization"</span>: 50.0}</div>
+  <div class="line">    ],</div>
+  <div class="line">    <span class="cyan">"summary"</span>: {<span class="cyan">"page_size"</span>: 4096, <span class="cyan">"caches"</span>: 32, <span class="cyan">"total_objs"</span>: 770048, <span class="cyan">"total_mem"</span>: 172507136, <span class="cyan">"active_mem"</span>: 134621184, <span class="cyan">"utilization"</span>: 77.3}</div>
+  <div class="line sep">  }</div>
+  <div class="line"></div>
+
+  <div class="line prompt">  $ ./slab-watch --watch 1</div>
+  <div class="line bold">  SLAB WATCH — /proc/slabinfo — live (top 10, elapsed 1s)</div>
+  <div class="line sep">  ------------------------------------------------------------------------------</div>
+  <div class="line dim">  NAME                         OBJS/s        MEM/s    MEMORY    UTIL</div>
+  <div class="line"><span class="yellow">  dentry                    2.5k/s    524.3k/s    19.7M   86.3%</span></div>
+  <div class="line"><span class="red">  inode_cache               1.7k/s      1.1M/s    51.2M   93.4%</span></div>
+  <div class="line"><span class="red">  kmalloc-16                1.6k/s     32.8k/s     1.0M   99.4%</span></div>
+  <div class="line"><span class="red">  kmalloc-64                1.3k/s     98.3k/s     4.1M   99.7%</span></div>
+  <div class="line"><span class="yellow">  filp                     921.0/s    262.1k/s    16.2M   78.3%</span></div>
+  <div class="line"><span class="red">  kmalloc-32               393.0/s     32.8k/s     1.0M   98.1%</span></div>
+  <div class="line"><span class="yellow">  kmalloc-128              368.0/s     65.5k/s     4.1M   75.0%</span></div>
+  <div class="line"><span class="green">  kmalloc-8                327.0/s     32.8k/s   544.0K   47.5%</span></div>
+  <div class="line"><span class="green">  vm_area_struct           286.0/s     65.5k/s     6.4M   62.7%</span></div>
+  <div class="line"><span class="green">  anon_vma_chain           225.0/s     32.8k/s     2.0M   62.2%</span></div>
+  <div class="line sep">  ------------------------------------------------------------------------------</div>
+  <div class="line">  SUMMARY  caches 32   objects 770.4k   slab memory <span class="cyan">167.1M</span>   alloc <span class="green">10.4k/s</span>   util <span class="yellow">76.8%</span></div>
+  <div class="line"></div>
+
+  <div class="line prompt">  $ ./slab-watch --selftest</div>
+  <div class="line green">  PASS</div><div class="line">  parse: formato moderno (tunables+slabdata)</div>
+  <div class="line green">  PASS</div><div class="line">  parse: formato legacy 6 campos</div>
+  <div class="line green">  PASS</div><div class="line">  parse: linea malformada se salta sin romper el resto</div>
+  <div class="line green">  PASS</div><div class="line">  mem: total_mem = num_slabs * pagesperslab * page_size</div>
+  <div class="line green">  PASS</div><div class="line">  mem: utilization = active_objs/num_objs</div>
+  <div class="line green">  PASS</div><div class="line">  demo: active_objs crece con el paso (tasas en watch)</div>
+  <div class="line green">  PASS</div><div class="line">  rates: hay crecimiento &gt; 0 objs/s</div>
+  <div class="line">  <span class="bold">34 passed, 0 failed</span>  <span class="dim">(1 skip: /proc/slabinfo no legible en contenedor)</span></div>
+  <div class="line dim">  ─────────────────────────────────────────────────────────────</div>
+  <div class="line dim">  Fuentes: /proc/slabinfo · top-N por memoria · tasas delta en --watch · JSON · --demo</div>
+</div>
+</body>
+</html>
